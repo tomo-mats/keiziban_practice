@@ -20,7 +20,7 @@ class Post
 		$sql .= 'AND p.del = 0 ORDER BY p.created asc ';
 		$sql .= 'LIMIT ? ';
 		$sql .= 'OFFSET ? ';
-		var_dump($sql);
+
 		$stmt = $this->mysqli->prepare($sql);
 		if($stmt){
 			$stmt->bind_param("iii", $sured_id, $limit, $offset);

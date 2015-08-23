@@ -60,7 +60,7 @@ require_once('view/header.php');
 							<dt><?php echo $post['id']; ?> : [<?php echo $post['created']; ?>] : <?php echo $post['username']; ?></dt>
 							<?php if ($post['reply_id'] != 0){ ?>
 							<dd>
-								<a href="<?php echo '/post.php?sured='.$sured_id.'&reply='.$post['reply_id'] ?>"><?php echo '>>'.$post['reply_id']; ?></a>
+								<a href="<?php echo 'post.php?sured='.$sured_id.'&reply='.$post['reply_id'] ?>"><?php echo '>>'.$post['reply_id']; ?></a>
 							</dd>
 							<?php } ?>
 							<dd>

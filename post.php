@@ -87,7 +87,7 @@ require_once('view/header.php');
 	<div class="container">
 		<div class="post-form">
 			<h2>スレッド投稿</h2>
-			<form action="" method="post">
+			<form action="<?php echo $_SERVER['SCRIPT_NAME'].'?sured='.$sured_id; ?>" method="post">
 				<dl>
 					<dt>投稿者名：</dt>
 					<dd><input type="text" name="username" value=""></dd>
@@ -101,7 +101,7 @@ require_once('view/header.php');
 		</div>
 		<div class="post-contents">
 			<h2>スレッドタイトル：<?php echo $sured_name; ?></h2>
-			<h3>投稿件数 / <?php echo $post_count; ?>件</h3>
+			<h3>投稿件数 / <span id="total_post"><?php echo $post_count; ?></span>件</h3>
 			<ul id="post-list">
 				<?php
 				if (count($post_list) > 0):
@@ -122,7 +122,7 @@ require_once('view/header.php');
 							</dd>
 							<dd class="reply-form" id="reply-form<?php echo $cnt; ?>" style="display: none;">
 								<p>┗ID<b><?php echo $post['id']; ?></b>に返信します</p>
-								<form action="" method="post">
+								<form action="<?php echo $_SERVER['SCRIPT_NAME']; ?>" method="post">
 									<dl>
 										<dt>返信者名：</dt>
 										<dd><input type="text" name="reply_username" value=""></dd>

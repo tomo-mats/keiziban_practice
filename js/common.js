@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
 	/*********** スレッド一覧ページ用 ***********/
 	$("#delete_btn").click(function(){
 		if(!confirm("選択したスレッドを削除します。")){
@@ -41,13 +41,16 @@ $(function() {
 			//ul以下の投稿一覧を一度全て削除
 			$("#post-list").empty();
 			//ul以下に取得したデータを入れ込む
-			$("#post-list").html(response.data);
+			$("#post-list").html(response.data.list);
+			//投稿件数を差し替える
+			$("#total_post").empty();
+			$("#total_post").html(response.data.count);
 		})
 		///通信に失敗,またはエラーが返って来た場合
 		.fail(function (response) {
-			console.log(message);
 			//エラーメッセージを取得
 			var message = $.parseJSON(response.responseText);
+			console.log(message);
 			//削除しようとしたメッセージにポップアップでエラーメッセージを表示する
 			$("#list-"+list_id).showBalloon({
 				contents : message.data,
@@ -75,7 +78,7 @@ $(function() {
 	//最下部スクロール時自動読み込み
 	$(window).bottom({proximity: 0.01});
 	
-	//ajax通信 データ取得時のoffset用
+	//ajax通信 データ取得時offset用
 	var page = 1;
 	
 	$(window).bind('bottom', function() {
@@ -112,8 +115,13 @@ $(function() {
 				//ステータスコードは正常で、dataTypeで定義したようにパース出来たとき
 				.done(function (response) {
 					//投稿内容の最後にに取得したデータを追加する
-					$("#post-list").append(response.data);
+					$("#post-list").append(response.data.list);
 					page++;
+					
+					//ajax通信後jqueryが動作しなくなるため再読み込み
+					//$.getScript("js/common.js");
+					$('script[src="js/common.js"]').remove();
+					$.getScript("js/common.js");
 				})
 				//通信に失敗,またはエラーが返って来た場合
 				.fail(function (response) {
@@ -121,9 +129,6 @@ $(function() {
 					var message = $.parseJSON(response.responseText);
 					console.log(response.responseText);
 				});
-				//ajax通信後jqueryが動作しなくなるため再読み込み
-				$.getScript("js/common.js");
-				
 				obj.data('loading', false);
 			}, 1500);
 		}

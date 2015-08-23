@@ -73,7 +73,7 @@ require_once('view/header.php');
 			</form>
 		</div>
 		<div class="sured">
-			<form action="" method="post">
+			<form action="<?php echo $_SERVER['SCRIPT_NAME']; ?>" method="post">
 				<h2>スレッド一覧</h2>
 				<p>※スレッドを削除する場合はチェックボックスにチェックを入れて削除を実行</p>
 				<ul>
@@ -82,7 +82,7 @@ require_once('view/header.php');
 						foreach ($sured_list as $sured) {
 							echo '<li>';
 							echo '<input type="checkbox" name="sured[]" value="'.$sured['id'].'">';
-							echo '<a href="/keiziban/post.php?sured='.$sured['id'].'">'.$sured['name'].'</a>';
+							echo '<a href="/post.php?sured='.$sured['id'].'">'.$sured['name'].'</a>';
 							echo '</li>';
 						}
 					}else{

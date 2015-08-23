@@ -72,7 +72,8 @@ if($post['type'] == 'delete'){
 	//スレッドの内容一覧を取得
 	$post_list = $post_class->getPostList($sured_id);
 	//取得したスレッドの内容一覧を元にHTMLを作成する
-	$data = createPostListHtml($post_list);
+	$data['list'] = createPostListHtml($post_list);
+	$data['count'] = count($post_list);
 
 	echo json_encode(compact('data'));
 
@@ -86,8 +87,7 @@ if($post['type'] == 'delete'){
 	$next_post_list = $post_class->getPostList($sured_id, $limit, $offset);
 
 	//取得したスレッドの内容一覧を元に次の10件のHTMLを作成する
-	$data = createPostListHtml($next_post_list, $offset);
-var_dump($next_post_list);
+	$data['list']  = createPostListHtml($next_post_list, $offset, $post['type']);
 	echo json_encode(compact('data'));
 }
 
@@ -96,7 +96,7 @@ var_dump($next_post_list);
  * @param 配列 $post_list スレッドの内容一覧
  * @return string (整形済みHTML)
  */
-function createPostListHtml($post_list, $offset = 0) {
+function createPostListHtml($post_list, $offset = 0, $type = '') {
 
 	$html = '';
 
@@ -107,10 +107,15 @@ function createPostListHtml($post_list, $offset = 0) {
 			$html .= '<li class="list" id="list-'.$cnt.'">'.PHP_EOL;
 			$html .= '	<dl>'.PHP_EOL;
 			$html .= '		<dt>'.$post['id'].' : ['.$post['created'].'] : '.$post['username'].'</dt>'.PHP_EOL;
+			if ($post['reply_id'] != 0){
+				$html .= '		<dd>'.PHP_EOL;
+				$html .= '			<a href="reply.php?sured='.$sured_id.'&reply='.$post['reply_id'].'">>>'.$post['reply_id'].'</a>'.PHP_EOL;
+				$html .= '		</dd>'.PHP_EOL;
+			}
 			$html .= '		<dd>'.nl2br($post['body']).'</dd>'.PHP_EOL;
 			$html .= '		<dd class="reply-form" id="reply-form'.$cnt.'" style="display: none;">'.PHP_EOL;
 			$html .= '			<p>┗ID<b>'.$post['id'].'</b>に返信します</p>'.PHP_EOL;
-			$html .= '			<form action="" method="post">'.PHP_EOL;
+			$html .= '			<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post">'.PHP_EOL;
 			$html .= '				<dl>'.PHP_EOL;
 			$html .= '					<dt>返信者名：</dt>'.PHP_EOL;
 			$html .= '					<dd><input type="text" name="reply_username" value=""></dd>'.PHP_EOL;
@@ -131,7 +136,9 @@ function createPostListHtml($post_list, $offset = 0) {
 			$html .= '</li>'.PHP_EOL;
 		}
 	}else{
-		$html .= '<p>投稿内容がありません。</p>';
+		if($type != 'page'){
+			$html .= '<p>投稿内容がありません。</p>';	
+		}
 	}
 
 	return $html;
